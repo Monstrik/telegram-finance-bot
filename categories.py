@@ -1,11 +1,11 @@
-"""Работа с категориями расходов"""
+"""Categories"""
 from typing import Dict, List, NamedTuple
 
 import db
 
 
 class Category(NamedTuple):
-    """Структура категории"""
+    """Category structure"""
     codename: str
     name: str
     is_base_expense: bool
@@ -17,7 +17,7 @@ class Categories:
         self._categories = self._load_categories()
 
     def _load_categories(self) -> List[Category]:
-        """Возвращает справочник категорий расходов из БД"""
+        """list of cat"""
         categories = db.fetchall(
             "category", "codename name is_base_expense aliases".split()
         )
@@ -25,10 +25,7 @@ class Categories:
         return categories
 
     def _fill_aliases(self, categories: List[Dict]) -> List[Category]:
-        """Заполняет по каждой категории aliases, то есть возможные
-        названия этой категории, которые можем писать в тексте сообщения.
-        Например, категория «кафе» может быть написана как cafe,
-        ресторан и тд."""
+        """aliases matching"""
         categories_result = []
         for index, category in enumerate(categories):
             aliases = category["aliases"].split(",")
@@ -44,19 +41,19 @@ class Categories:
         return categories_result
 
     def get_all_categories(self) -> List[Dict]:
-        """Возвращает справочник категорий."""
+        """Get categories """
         return self._categories
 
     def get_category(self, category_name: str) -> Category:
-        """Возвращает категорию по одному из её алиасов."""
-        finded = None
+        """Get Category bby alias"""
+        found = None
         other_category = None
         for category in self._categories:
             if category.codename == "other":
                 other_category = category
             for alias in category.aliases:
                 if category_name in alias:
-                    finded = category
-        if not finded:
-            finded = other_category
-        return finded
+                    found = category
+        if not found:
+            found = other_category
+        return found

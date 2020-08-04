@@ -21,16 +21,16 @@ create table expense(
 
 insert into category (codename, name, is_base_expense, aliases)
 values
-    ("products", "продукты", true, "еда"),
-    ("coffee", "кофе", true, ""),
-    ("dinner", "обед", true, "столовая, ланч, бизнес-ланч, бизнес ланч"),
-    ("cafe", "кафе", true, "ресторан, рест, мак, макдональдс, макдак, kfc, ilpatio, il patio"),
-    ("transport", "общ. транспорт", false, "метро, автобус, metro"),
-    ("taxi", "такси", false, "яндекс такси, yandex taxi"),
-    ("phone", "телефон", false, "теле2, связь"),
-    ("books", "книги", false, "литература, литра, лит-ра"),
-    ("internet", "интернет", false, "инет, inet"),
-    ("subscriptions", "подписки", false, "подписка"),
-    ("other", "прочее", true, "");
+    ("grocery", "grocery", true, ""),
+    ("coffee", "coffee", true, ""),
+    ("dinner", "dinner", true, "dinner, lunch"),
+    ("fast_food", "fast food", true, "cafe, restaurant, sushi, patio"),
+    ("transport", "transport", false, "subway, bus, metro, ferry"),
+    ("taxi", "taxi", false, "uber, lyft"),
+    ("phone", "phone", false, ""),
+    ("books", "books", false, "book"),
+    ("internet", "internet", false, "inet"),
+    ("subscriptions", "subscriptions", false, "subs"),
+    ("other", "subscriptions", false, "");
 
 insert into budget(codename, daily_limit) values ('base', 500);

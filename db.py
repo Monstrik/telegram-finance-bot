@@ -44,7 +44,7 @@ def get_cursor():
 
 
 def _init_db():
-    """Инициализирует БД"""
+    """Init DB"""
     with open("createdb.sql", "r") as f:
         sql = f.read()
     cursor.executescript(sql)
@@ -52,7 +52,7 @@ def _init_db():
 
 
 def check_db_exists():
-    """Проверяет, инициализирована ли БД, если нет — инициализирует"""
+    """check if DB exist"""
     cursor.execute("SELECT name FROM sqlite_master "
                    "WHERE type='table' AND name='expense'")
     table_exists = cursor.fetchall()
