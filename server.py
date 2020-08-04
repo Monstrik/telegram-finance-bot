@@ -9,7 +9,6 @@ import expenses
 from categories import Categories
 from middlewares import AccessMiddleware
 
-
 logging.basicConfig(level=logging.INFO)
 
 # PROXY_URL = os.getenv("TELEGRAM_PROXY_URL")
@@ -48,30 +47,30 @@ async def del_expense(message: types.Message):
     await message.answer(answer_message)
 
 
-@dp.message_handler(commands=['categories'])
+@dp.message_handler(commands=['categories', 'cats', 'cat', 'c'])
 async def categories_list(message: types.Message):
     """Отправляет список категорий расходов"""
     categories = Categories().get_all_categories()
-    answer_message = "Категории трат:\n\n* " +\
-            ("\n* ".join([c.name+' ('+", ".join(c.aliases)+')' for c in categories]))
+    answer_message = "Категории трат:\n\n* " + \
+                     ("\n* ".join([c.name + ' (' + ", ".join(c.aliases) + ')' for c in categories]))
     await message.answer(answer_message)
 
 
-@dp.message_handler(commands=['today'])
+@dp.message_handler(commands=['today', 'day', 'd'])
 async def today_statistics(message: types.Message):
     """Отправляет сегодняшнюю статистику трат"""
     answer_message = expenses.get_today_statistics()
     await message.answer(answer_message)
 
 
-@dp.message_handler(commands=['month'])
+@dp.message_handler(commands=['month', 'm'])
 async def month_statistics(message: types.Message):
     """Отправляет статистику трат текущего месяца"""
     answer_message = expenses.get_month_statistics()
     await message.answer(answer_message)
 
 
-@dp.message_handler(commands=['expenses'])
+@dp.message_handler(commands=['expenses', 'exp', 'e'])
 async def list_expenses(message: types.Message):
     """Отправляет последние несколько записей о расходах"""
     last_expenses = expenses.last()
@@ -83,8 +82,8 @@ async def list_expenses(message: types.Message):
         f"{expense.amount} руб. на {expense.category_name} — нажми "
         f"/del{expense.id} для удаления"
         for expense in last_expenses]
-    answer_message = "Последние сохранённые траты:\n\n* " + "\n\n* "\
-            .join(last_expenses_rows)
+    answer_message = "Последние сохранённые траты:\n\n* " + "\n\n* " \
+        .join(last_expenses_rows)
     await message.answer(answer_message)
 
 
