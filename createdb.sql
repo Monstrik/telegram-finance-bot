@@ -31,6 +31,6 @@ values
     ("books", "books", false, "book"),
     ("internet", "internet", false, "inet"),
     ("subscriptions", "subscriptions", false, "subs"),
-    ("other", "subscriptions", false, "");
+    ("other", "other", false, "misc, o");
 
 insert into budget(codename, daily_limit) values ('base', 500);
