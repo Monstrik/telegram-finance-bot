@@ -9,7 +9,11 @@ import expenses
 from categories import Categories
 from middlewares import AccessMiddleware
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
+
+logger = logging.getLogger("SERVER")
+
+logger.debug('Server Start')
 
 
 def create_bot():
@@ -33,6 +37,8 @@ dp = Dispatcher(bot)
 
 ACCESS_ID = os.getenv("TELEGRAM_ACCESS_ID")
 dp.middleware.setup(AccessMiddleware(ACCESS_ID))
+
+logger.debug('Bot and Dispatcher READY')
 
 
 @dp.message_handler(commands=['start', 'help', 'h', 's'])
