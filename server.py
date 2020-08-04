@@ -1,7 +1,7 @@
 import logging
 import os
 
-# import aiohttp
+import aiohttp
 from aiogram import Bot, Dispatcher, executor, types
 
 import exceptions
@@ -11,15 +11,24 @@ from middlewares import AccessMiddleware
 
 logging.basicConfig(level=logging.INFO)
 
-# PROXY_URL = os.getenv("TELEGRAM_PROXY_URL")
-# PROXY_AUTH = aiohttp.BasicAuth(
-#     login=os.getenv("TELEGRAM_PROXY_LOGIN"),
-#     password=os.getenv("TELEGRAM_PROXY_PASSWORD")
-# )
-# bot = Bot(token=API_TOKEN, proxy=PROXY_URL, proxy_auth=PROXY_AUTH)
 
-API_TOKEN = os.getenv("TELEGRAM_API_TOKEN")
-bot = Bot(token=API_TOKEN)
+def create_bot():
+    api_token = os.getenv("TELEGRAM_API_TOKEN")
+    proxy_url = os.getenv("TELEGRAM_PROXY_URL")
+    proxy_login = os.getenv("TELEGRAM_PROXY_LOGIN")
+    proxy_password = os.getenv("TELEGRAM_PROXY_PASSWORD")
+
+    if proxy_url is None:
+        new_bot = Bot(token=api_token)
+    elif proxy_login is None:
+        new_bot = Bot(token=api_token, proxy=proxy_url)
+    else:
+        proxy_auth = aiohttp.BasicAuth(login=proxy_login, password=proxy_password)
+        new_bot = Bot(token=api_token, proxy=proxy_url, proxy_auth=proxy_auth)
+    return new_bot
+
+
+bot = create_bot()
 dp = Dispatcher(bot)
 
 ACCESS_ID = os.getenv("TELEGRAM_ACCESS_ID")
