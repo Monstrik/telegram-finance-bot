@@ -26,16 +26,17 @@ ACCESS_ID = os.getenv("TELEGRAM_ACCESS_ID")
 dp.middleware.setup(AccessMiddleware(ACCESS_ID))
 
 
-@dp.message_handler(commands=['start', 'help'])
+@dp.message_handler(commands=['start', 'help', 'h', 's'])
 async def send_welcome(message: types.Message):
     """Send help text"""
     await message.answer(
         "Expenses Tracker Bot\n\n"
-        "Add exp: 250 taxi\n"
-        "Day stats: /today\n"
-        "Month stats: /month\n"
-        "Last expenses: /expenses /exp /e\n"
-        "List Categories: /categories /cat /c")
+        "Help: /help /h\n\n"
+        "List Categories: /categories /cat /c\n"
+        "Add exp: 250 taxi\n\n"
+        "Day stats: /today /day /d\n"
+        "Month stats: /month /m\n"
+        "Last expenses: /expenses /exp /e\n")
 
 
 @dp.message_handler(lambda message: message.text.startswith('/del'))
