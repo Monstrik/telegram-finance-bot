@@ -2,10 +2,8 @@ import logging
 import os
 
 import aiohttp
-from aiogram import Bot, Dispatcher, executor, types
-
-from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, \
-    InlineKeyboardButton
+from aiogram import Bot, Dispatcher, executor
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message
 
 import exceptions
 import expenses
@@ -51,42 +49,32 @@ logger.debug('Bot and Dispatcher READY')
 
 
 @dp.message_handler(commands=['start', 'help', 'h', 's'])
-async def send_welcome(message: types.Message):
+async def send_welcome(message: Message):
     """Send help text"""
 
     _keyboard = [
-        [types.KeyboardButton('/Categories')],
-        [types.KeyboardButton('/Expenses')],
-        [types.KeyboardButton('/Month')],
-        [types.KeyboardButton('/Today')],
-        [types.KeyboardButton('/Help')],
+        [KeyboardButton('/Categories')],
+        [KeyboardButton('/Expenses')],
+        [KeyboardButton('/Month')],
+        [KeyboardButton('/Today')],
+        [KeyboardButton('/Help')],
     ]
     keyboard = ReplyKeyboardMarkup(keyboard=_keyboard)
 
-    button_hi = KeyboardButton('Привет! 👋')
-
-    greet_kb = ReplyKeyboardMarkup()
-    greet_kb.add(button_hi)
-    greet_kb1 = ReplyKeyboardMarkup(resize_keyboard=True).add(button_hi)
-    greet_kb2 = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(button_hi)
-
-    inline_btn_1 = InlineKeyboardButton('Categories', callback_data='Categories')
-    inline_kb1 = InlineKeyboardMarkup().add(inline_btn_1)
-
-    # await message.answer(
-    await message.reply(
+    await message.answer(
+    # await message.reply(
         "Expenses Tracker\n\n"
-        "Add exp: 250 taxi\n\n"
-        "List Categories: /categories /cat /c\n"
-        "Day stats: /today /day /d\n"
-        "Month stats: /month /m\n"
-        "Last expenses: /expenses /exp /e\n"
-        "Help: /help /h"
+        "Add exp like this: 250 taxi\n"
+        # "List Categories: /categories /cat /c\n"
+        # "Day stats: /today /day /d\n"
+        # "Month stats: /month /m\n"
+        # "Last expenses: /expenses /exp /e\n"
+        # "Help: /help /h"
         , reply_markup=keyboard)
 
 
 @dp.message_handler(lambda message: message.text.startswith('/del'))
-async def del_expense(message: types.Message):
+async def del_expense(message: Message):
     """del expense by id"""
     row_id = int(message.text[4:])
     expenses.delete_expense(row_id)
@@ -95,7 +83,7 @@ async def del_expense(message: types.Message):
 
 
 @dp.message_handler(commands=['categories', 'cats', 'cat', 'c'])
-async def categories_list(message: types.Message):
+async def categories_list(message: Message):
     """Send categories list"""
     categories = Categories().get_all_categories()
     answer_message = "Categories:\n\n* " + \
@@ -104,21 +92,21 @@ async def categories_list(message: types.Message):
 
 
 @dp.message_handler(commands=['today', 'day', 'd'])
-async def today_statistics(message: types.Message):
+async def today_statistics(message: Message):
     """Send today statistics"""
     answer_message = expenses.get_today_statistics()
     await message.answer(answer_message)
 
 
 @dp.message_handler(commands=['month', 'm'])
-async def month_statistics(message: types.Message):
+async def month_statistics(message: Message):
     """Send month statistics"""
     answer_message = expenses.get_month_statistics()
     await message.answer(answer_message)
 
 
 @dp.message_handler(commands=['expenses', 'exp', 'e'])
-async def list_expenses(message: types.Message):
+async def list_expenses(message: Message):
     """Send last expenses"""
     last_expenses = expenses.last()
     if not last_expenses:
@@ -135,7 +123,7 @@ async def list_expenses(message: types.Message):
 
 
 @dp.message_handler()
-async def add_expense(message: types.Message):
+async def add_expense(message: Message):
     """add expense"""
     try:
         expense = expenses.add_expense(message.text)
