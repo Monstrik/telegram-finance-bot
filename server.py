@@ -4,12 +4,15 @@ import os
 import aiohttp
 from aiogram import Bot, Dispatcher, executor, types
 
+from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, \
+    InlineKeyboardButton
+
 import exceptions
 import expenses
 from categories import Categories
 from middlewares import AccessMiddleware
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger("SERVER")
 
@@ -41,17 +44,45 @@ dp.middleware.setup(AccessMiddleware(ACCESS_ID))
 logger.debug('Bot and Dispatcher READY')
 
 
+# @dp.callback_query_handler(func=lambda c: c.data == 'Categories')
+# async def process_callback_button1(callback_query: types.CallbackQuery):
+#     await bot.answer_callback_query(callback_query.id)
+#     await bot.send_message(callback_query.from_user.id, 'Нажата первая кнопка!')
+
+
 @dp.message_handler(commands=['start', 'help', 'h', 's'])
 async def send_welcome(message: types.Message):
     """Send help text"""
-    await message.answer(
-        "Expenses Tracker Bot\n\n"
-        "Help: /help /h\n\n"
-        "List Categories: /categories /cat /c\n"
+
+    _keyboard = [
+        [types.KeyboardButton('/Categories')],
+        [types.KeyboardButton('/Expenses')],
+        [types.KeyboardButton('/Month')],
+        [types.KeyboardButton('/Today')],
+        [types.KeyboardButton('/Help')],
+    ]
+    keyboard = ReplyKeyboardMarkup(keyboard=_keyboard)
+
+    button_hi = KeyboardButton('Привет! 👋')
+
+    greet_kb = ReplyKeyboardMarkup()
+    greet_kb.add(button_hi)
+    greet_kb1 = ReplyKeyboardMarkup(resize_keyboard=True).add(button_hi)
+    greet_kb2 = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(button_hi)
+
+    inline_btn_1 = InlineKeyboardButton('Categories', callback_data='Categories')
+    inline_kb1 = InlineKeyboardMarkup().add(inline_btn_1)
+
+    # await message.answer(
+    await message.reply(
+        "Expenses Tracker\n\n"
         "Add exp: 250 taxi\n\n"
+        "List Categories: /categories /cat /c\n"
         "Day stats: /today /day /d\n"
         "Month stats: /month /m\n"
-        "Last expenses: /expenses /exp /e\n")
+        "Last expenses: /expenses /exp /e\n"
+        "Help: /help /h"
+        , reply_markup=keyboard)
 
 
 @dp.message_handler(lambda message: message.text.startswith('/del'))
