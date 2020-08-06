@@ -11,10 +11,7 @@ from categories import Categories
 from middlewares import AccessMiddleware
 
 logging.basicConfig(level=logging.INFO)
-
 logger = logging.getLogger("SERVER")
-
-logger.debug('Server Start')
 
 
 def create_bot():
@@ -33,6 +30,8 @@ def create_bot():
     return new_bot
 
 
+logger.debug('Server Start')
+
 bot = create_bot()
 dp = Dispatcher(bot)
 
@@ -40,12 +39,6 @@ ACCESS_ID = os.getenv("TELEGRAM_ACCESS_ID")
 dp.middleware.setup(AccessMiddleware(ACCESS_ID))
 
 logger.debug('Bot and Dispatcher READY')
-
-
-# @dp.callback_query_handler(func=lambda c: c.data == 'Categories')
-# async def process_callback_button1(callback_query: types.CallbackQuery):
-#     await bot.answer_callback_query(callback_query.id)
-#     await bot.send_message(callback_query.from_user.id, 'Нажата первая кнопка!')
 
 
 @dp.message_handler(commands=['start', 'help', 'h', 's'])
@@ -62,7 +55,7 @@ async def send_welcome(message: Message):
     keyboard = ReplyKeyboardMarkup(keyboard=_keyboard)
 
     await message.answer(
-    # await message.reply(
+        # await message.reply(
         "Expenses Tracker\n\n"
         "Add exp like this: 250 taxi\n"
         # "List Categories: /categories /cat /c\n"
@@ -86,8 +79,8 @@ async def del_expense(message: Message):
 async def categories_list(message: Message):
     """Send categories list"""
     categories = Categories().get_all_categories()
-    answer_message = "Categories:\n\n* " + \
-                     ("\n* ".join([c.name + ' (' + ", ".join(c.aliases) + ')' for c in categories]))
+    answer_message = "Categories:\n\n* " + (
+        "\n* ".join([c.name + ' (' + ", ".join(c.aliases) + ')' for c in categories]))
     await message.answer(answer_message)
 
 
