@@ -26,8 +26,7 @@ class Expense(NamedTuple):
 def add_expense(raw_message: str) -> Expense:
     """Add Expense from user text"""
     parsed_message = _parse_message(raw_message)
-    category = Categories().get_category(
-        parsed_message.category_text)
+    category = Categories().get_category(parsed_message.category_text)
     inserted_row_id = db.insert("expense", {
         "amount": parsed_message.amount,
         "created": _get_now_formatted(),
@@ -123,6 +122,8 @@ def _get_now_datetime() -> datetime.datetime:
     tz = pytz.timezone("America/New_York")
     now = datetime.datetime.now(tz)
     return now
+
+
 
 
 def _get_budget_limit() -> int:

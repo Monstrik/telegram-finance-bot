@@ -21,9 +21,9 @@ create table expense(
 
 insert into category (codename, name, is_base_expense, aliases)
 values
-    ("grocery", "grocery", true, ""),
-    ("coffee", "coffee", true, ""),
-    ("dinner", "dinner", true, "dinner, lunch"),
+    ("grocery", "Grocery", true, ""),
+    ("coffee", "Coffee", true, ""),
+    ("dinner", "Dinner", true, "dinner, lunch"),
     ("fast_food", "fast food", true, "cafe, restaurant, sushi, patio"),
     ("transport", "transport", false, "subway, bus, metro, ferry"),
     ("taxi", "taxi", false, "uber, lyft"),
